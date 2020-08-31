@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { FeatureListComponent } from './feature-list/feature-list.component';
+import { SearchComponent } from './components/search/search.component';
 
 const routes: Routes = [
-  { path: '', component: FeatureListComponent }
+  { path: '', component: SearchComponent }
 ];
 
 @NgModule({

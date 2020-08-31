@@ -1,6 +1,14 @@
 <article>
-    <mat-form-field appearance="fill">
-        <mat-label>Input</mat-label>
-        <input matInput>
-      </mat-form-field>
+  <div class="search-input">
+    <label>Customer ID: </label>
+    <input type="text" [formControl]="customerId">
+  </div>
+  <div class="features">
+    <div class="feature" *ngFor="let feature of featureNames">
+      <mat-checkbox [value]="feature" (change)="onSelectFeature($event)" class="example-margin">{{feature}}</mat-checkbox>
+    </div>
+  </div>
+  <div class="button-group">
+    <button [disabled]="disableButton()" mat-raised-button color="primary">Search</button>
+  </div>
 </article>

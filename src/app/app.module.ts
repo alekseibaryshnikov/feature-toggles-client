@@ -14,6 +14,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SearchComponent } from './components/search/search.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatListModule } from '@angular/material/list';
+import { ApiService } from './services/api.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -32,9 +36,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatNativeDateModule,
     MatCheckboxModule,
     MatGridListModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatListModule,
+    ReactiveFormsModule,
+    MatButtonModule
   ],
-  providers: [],
+  providers: [ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
