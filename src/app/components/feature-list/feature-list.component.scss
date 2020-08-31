@@ -1,8 +1,11 @@
 article {
     display: flex;
-    padding: 10px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: -10px;
 
     div {
-        padding: 0 10px 0 0;
+        padding: 10px;
+        box-sizing: border-box;
     }
 }

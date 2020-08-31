@@ -3,18 +3,18 @@ $base-radius: 10px;
 $base-padding: 15px;
 $base-margin: 30px;
 
-article {
-  padding: $base-margin;
-  max-width: 700px;
-  margin: 0 auto;
-
+article.body {
   div.search-input {
     margin-bottom: $base-margin;
 
     label {
       display: block;
-      margin-bottom: $base-margin;
+      margin-bottom: $base-margin / 3;
       color: #1b121277;
+
+      span {
+          color: #ff0000a4;
+      }
     }
 
     input {
@@ -36,6 +36,7 @@ article {
   div.features {
     display: flex;
     margin: $base-margin 0;
+    flex-wrap: wrap;
 
     div.feature {
       box-shadow: $base-shadow;
@@ -55,5 +56,19 @@ article {
 
   div.button-group {
       margin-top: $base-margin;
+
+      button {
+        margin-right: $base-margin / 3;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
   }
+}
+
+article.search-result {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 30px;
 }

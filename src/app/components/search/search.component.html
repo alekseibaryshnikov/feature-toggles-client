@@ -1,6 +1,6 @@
-<article>
+<article class="body">
   <div class="search-input">
-    <label>Customer ID: </label>
+    <label>Customer ID: <span *ngIf="customerId.status === 'INVALID'">should be consist only of digits..</span></label>
     <input type="text" [formControl]="customerId">
   </div>
   <div class="features">
@@ -9,6 +9,15 @@
     </div>
   </div>
   <div class="button-group">
-    <button [disabled]="disableButton()" mat-raised-button color="primary">Search</button>
+    <button [disabled]="disableButton()" mat-raised-button color="primary" (click)="onSearch()">Search</button>
+    <button [disabled]="!featureResponse" mat-raised-button color="warn" (click)="clearSelected()">Clear</button>
   </div>
+</article>
+
+<article *ngIf="featureResponse && featureResponse.features.length > 0" class="search-result">
+  <app-feature-list [features]="featureResponse.features"></app-feature-list>
+</article>
+
+<article *ngIf="!featureResponse" class="search-result">
+  <p>Nothing to show..</p>
 </article>

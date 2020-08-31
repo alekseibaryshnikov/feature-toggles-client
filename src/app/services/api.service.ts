@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import FeatureListResponse from '../components/feature-list/featureListResponse';
 import { Observable } from 'rxjs';
+import { Search } from '../components/search/search'
 
 @Injectable()
 export class ApiService {
@@ -9,17 +10,8 @@ export class ApiService {
 
     constructor(private http: HttpClient) { }
 
-    getFeaturesList(): Observable<FeatureListResponse> {
-        return this.http.post<FeatureListResponse>(this.url, {
-            featureRequest: {
-                customerId: 0,
-                features: [
-                    {name: "feature_1"},
-                    {name: "feature_2"},
-                    {name: "feature_3"}
-                ]
-            }
-        });
+    getFeaturesList(body: Search): Observable<FeatureListResponse> {
+        return this.http.post<FeatureListResponse>(this.url, body);
     }
 
     getFeatureNames(): Observable<string[]> {

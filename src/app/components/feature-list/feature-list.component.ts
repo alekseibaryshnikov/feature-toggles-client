@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import Feature from './feature/feature';
 
@@ -9,16 +9,11 @@ import Feature from './feature/feature';
   providers: [ApiService]
 })
 export class FeatureListComponent implements OnInit {
+  
+  @Input('features')
   features: Feature[];
-
-  constructor(private api: ApiService) { }
-
+  
   ngOnInit(): void {
-    this.getFeatureList();
-  }
-
-  getFeatureList() {
-    this.api.getFeaturesList().subscribe(response => (this.features = response.features));
   }
 
 }

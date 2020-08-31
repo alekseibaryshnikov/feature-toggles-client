@@ -18,13 +18,16 @@ import { MatListModule } from '@angular/material/list';
 import { ApiService } from './services/api.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
+import { TableComponent } from './components/table/table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FeatureComponent,
     FeatureListComponent,
-    SearchComponent
+    SearchComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,9 +42,10 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatListModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTabsModule
   ],
   providers: [ApiService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
