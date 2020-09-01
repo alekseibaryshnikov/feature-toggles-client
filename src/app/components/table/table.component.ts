@@ -6,14 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
+  updatedAt: string;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  updateState($event) {
-    
+  updateState($event: string) {
+    this.updatedAt = $event;
   }
 
 }

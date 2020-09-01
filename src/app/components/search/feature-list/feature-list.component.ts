@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ApiService } from '../../services/api.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ApiService } from '../../../services/api.service';
 import { Feature } from './feature/feature';
 
 @Component({
@@ -13,7 +13,12 @@ export class FeatureListComponent implements OnInit {
   @Input('features')
   features: Feature[];
 
+  @Output('featureEmitter') featureEmitter = new EventEmitter<{active: boolean, featureId: bigint}>();
+
   ngOnInit(): void {
   }
 
+  onEmitFeature($event) {
+    console.log($event)
+  }
 }

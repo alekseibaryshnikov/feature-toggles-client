@@ -4,5 +4,5 @@
         <p>Expired: {{feature.expired}}</p>
         <p>Inverted: {{feature.inverted}}</p>
     </mat-card-content>
-    <mat-checkbox [checked]="feature.active">Active</mat-checkbox>
+    <mat-checkbox [checked]="feature.active" (change)="onChangeActivity($event)">Active</mat-checkbox>
 </mat-card>

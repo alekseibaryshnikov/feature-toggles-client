@@ -1,37 +1,51 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import FeatureListResponse from '../components/feature-list/featureListResponse';
+import FeatureListResponse from '../components/search/feature-list/featureListResponse';
 import { Observable } from 'rxjs';
-import { Search } from '../components/search/search'
+import { Search } from '../components/search/search';
 import { FeatureEntity } from '../components/crud/featureEntity';
 
 @Injectable()
 export class ApiService {
-    url: string = 'http://localhost:8080/api/v1/features';
+  featureUrl: string = 'http://localhost:8080/api/v1/feature';
+  customerUrl: string = 'http://localhost:8080/api/v1/customer';
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-    postFeaturesList(body: Search): Observable<FeatureListResponse> {
-        return this.http.post<FeatureListResponse>(this.url, body);
-    }
+  postFeaturesList(body: Search): Observable<FeatureListResponse> {
+    return this.http.post<FeatureListResponse>(this.featureUrl, body);
+  }
 
-    getFeatureNames(): Observable<string[]> {
-        return this.http.get<string[]>(`${this.url}/names`);
-    }
+  getFeatureNames(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.featureUrl}/names`);
+  }
 
-    getFeaturesList(): Observable<FeatureEntity[]> {
-        return this.http.get<FeatureEntity[]>(this.url);
-    }
+  getFeaturesList(): Observable<FeatureEntity[]> {
+    return this.http.get<FeatureEntity[]>(this.featureUrl);
+  }
 
-    patchFeature(feature: FeatureEntity) {
-        return this.http.patch(this.url, feature);
-    }
+  patchFeature(feature: FeatureEntity) {
+    return this.http.patch(this.featureUrl, feature);
+  }
 
-    deleteFeature(id: bigint) {       
-        return this.http.delete(this.url, { params: { id: id.toString() } })
-    }
+  deleteFeature(id: bigint) {
+    return this.http.delete(this.featureUrl, { params: { id: `${id}` } });
+  }
 
-    putFeature(): Observable<FeatureEntity> {
-        return this.http.put<FeatureEntity>(this.url, {});
-    }
+  putFeature(): Observable<FeatureEntity> {
+    return this.http.put<FeatureEntity>(this.featureUrl, {});
+  }
+
+  bindFeatureToCustomer(featureId: bigint, customerId: bigint) {
+    return this.http.post(`${this.customerUrl}/features`, {
+      featureId,
+      customerId,
+    });
+  }
+
+  unbindFeatureFromCustomer(featureId: bigint, customerId: bigint) {
+    return this.http.delete(`${this.customerUrl}/features`, {
+      params: { featureId: `${featureId}`, customerId: `${customerId}` },
+    });
+  }
 }
