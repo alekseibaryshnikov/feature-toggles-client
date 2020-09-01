@@ -20,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TableComponent } from './components/table/table.component';
+import { CrudComponent } from './components/crud/crud.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { TableComponent } from './components/table/table.component';
     FeatureListComponent,
     SearchComponent,
     TableComponent,
+    CrudComponent
   ],
   imports: [
     BrowserModule,
@@ -43,9 +45,10 @@ import { TableComponent } from './components/table/table.component';
     MatListModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatTabsModule
+    MatTabsModule,
+    MatButtonModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

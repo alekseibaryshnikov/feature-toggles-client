@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import Feature from './feature';
+import { Feature } from './feature';
 
 @Component({
   selector: 'app-feature',

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import Feature from './feature/feature';
+import { Feature } from './feature/feature';
 
 @Component({
   selector: 'app-feature-list',
@@ -9,10 +9,10 @@ import Feature from './feature/feature';
   providers: [ApiService]
 })
 export class FeatureListComponent implements OnInit {
-  
+
   @Input('features')
   features: Feature[];
-  
+
   ngOnInit(): void {
   }
 

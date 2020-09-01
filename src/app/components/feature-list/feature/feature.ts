@@ -1,7 +1,7 @@
-export default interface Feature {
+export interface Feature {
     featureId: bigint;
     name: string;
-    expired: Date;
+    expired: boolean;
     inverted: boolean;
     active: boolean;
 }

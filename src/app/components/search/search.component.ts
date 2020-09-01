@@ -44,7 +44,7 @@ export class SearchComponent implements OnInit {
       }
     };
 
-    this.api.getFeaturesList(requestBody).subscribe(response => this.featureResponse = response);
+    this.api.postFeaturesList(requestBody).subscribe(response => this.featureResponse = response);
   }
 
   clearSelected() {

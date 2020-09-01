@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import FeatureListResponse from '../components/feature-list/featureListResponse';
 import { Observable } from 'rxjs';
 import { Search } from '../components/search/search'
+import { FeatureEntity } from '../components/crud/featureEntity';
 
 @Injectable()
 export class ApiService {
@@ -10,11 +11,27 @@ export class ApiService {
 
     constructor(private http: HttpClient) { }
 
-    getFeaturesList(body: Search): Observable<FeatureListResponse> {
+    postFeaturesList(body: Search): Observable<FeatureListResponse> {
         return this.http.post<FeatureListResponse>(this.url, body);
     }
 
     getFeatureNames(): Observable<string[]> {
         return this.http.get<string[]>(`${this.url}/names`);
+    }
+
+    getFeaturesList(): Observable<FeatureEntity[]> {
+        return this.http.get<FeatureEntity[]>(this.url);
+    }
+
+    patchFeature(feature: FeatureEntity) {
+        return this.http.patch(this.url, feature);
+    }
+
+    deleteFeature(id: bigint) {       
+        return this.http.delete(this.url, { params: { id: id.toString() } })
+    }
+
+    putFeature(): Observable<FeatureEntity> {
+        return this.http.put<FeatureEntity>(this.url, {});
     }
 }
