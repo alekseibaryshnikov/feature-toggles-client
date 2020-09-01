@@ -1,57 +1,99 @@
 <article>
-    <button mat-raised-button (click)="addNewFeature()">New Feature</button>
-</article>
-<table>
+  <button mat-raised-button color="accent" (click)="addNewFeature()">
+    New Feature
+  </button>
+  <table>
+    <caption>Feature Toggle List</caption>
     <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Technical Name</th>
-            <th scope="col">Expires On</th>
-            <th scope="col">Description</th>
-            <th scope="col">Inverted</th>
-            <th scope="col">Acrchived</th>
-        </tr>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Technical Name</th>
+        <th scope="col">Expires On</th>
+        <th scope="col">Description</th>
+        <th scope="col">Inverted</th>
+        <th scope="col">Acrchived</th>
+      </tr>
     </thead>
-    <tbody>
-        <tr *ngFor="let feature of featureFormArray.controls; index as idx">
-            <td style="text-align: center;">
-                {{feature.controls.featureId.value}}
-                <input hidden [formControl]="feature.controls.featureId" />
-            </td>
-            <td>
-                <input type="text" [formControl]="feature.controls.displayName" />
-            </td>
-            <td>
-                <input type="text" [formControl]="feature.controls.technicalName" />
-            </td>
-            <td style="text-align: center;">
-                <div class="datepicker">
-                    <div>
-                        <input matInput [formControl]="feature.controls.expiresOn" [matDatepicker]="picker">
-                        <mat-datepicker #picker></mat-datepicker>
-                    </div>
-                    <div class="date-toggle">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <input type="text" [formControl]="feature.controls.description" />
-            </td>
-            <td style="text-align: center;">
-                <button mat-raised-button
-                    (click)="changeBooleanField(idx, 'inverted')">{{feature.controls.inverted.value ? 'Yes' : 'No'}}</button>
-                <input hidden type="text" [formControl]="feature.controls.inverted" />
-            </td>
-            <td style="text-align: center;">
-                <button mat-raised-button
-                    (click)="changeBooleanField(idx, 'archived')">{{feature.controls.archived.value ? 'Yes' : 'No'}}</button>
-                <input hidden type="text" [formControl]="feature.controls.archived" />
-            </td>
-            <td>
-                <button mat-raised-button color="warn" (click)="deleteFeature(idx)">X</button>
-            </td>
-        </tr>
+    <tbody *ngIf="featureFormArray && featureFormArray.length > 0">
+      <tr *ngFor="let feature of featureFormArray.controls; index as idx">
+        <td style="text-align: center">
+          {{ getFormControl(feature, "featureId").value }}
+          <input hidden [formControl]="getFormControl(feature, 'featureId')" />
+        </td>
+        <td>
+          <input
+            type="text"
+            [formControl]="getFormControl(feature, 'displayName')"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            [formControl]="getFormControl(feature, 'technicalName')"
+          />
+        </td>
+        <td style="text-align: center">
+          <div class="datepicker">
+            <div>
+              <input
+                matInput
+                [formControl]="getFormControl(feature, 'expiresOn')"
+                [matDatepicker]="picker"
+              />
+              <mat-datepicker #picker></mat-datepicker>
+            </div>
+            <div class="date-toggle">
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+            </div>
+          </div>
+        </td>
+        <td>
+          <input
+            type="text"
+            [formControl]="getFormControl(feature, 'description')"
+          />
+        </td>
+        <td style="text-align: center">
+          <button
+            mat-raised-button
+            (click)="changeBooleanField(idx, 'inverted')"
+          >
+            {{ getFormControl(feature, "inverted").value ? "Yes" : "No" }}
+          </button>
+          <input
+            hidden
+            type="text"
+            [formControl]="getFormControl(feature, 'inverted')"
+          />
+        </td>
+        <td style="text-align: center">
+          <button
+            mat-raised-button
+            (click)="changeBooleanField(idx, 'archived')"
+          >
+            {{ getFormControl(feature, "archived").value ? "Yes" : "No" }}
+          </button>
+          <input
+            hidden
+            type="text"
+            [formControl]="getFormControl(feature, 'archived')"
+          />
+        </td>
+        <td>
+          <button mat-raised-button color="primary" (click)="saveFeature(idx)">
+            Save
+          </button>
+        </td>
+        <td>
+          <button mat-raised-button color="warn" (click)="deleteFeature(idx)">
+            X
+          </button>
+        </td>
+      </tr>
     </tbody>
-</table>
+  </table>
+</article>
