@@ -1,5 +1,5 @@
 <article *ngIf="features.length > 0">
     <div *ngFor="let feature of features" >
-        <app-feature [feature]="feature" (featureEmitter)="onEmitFeature($event)"></app-feature>
+        <app-feature [customerId]="customerId" [feature]="feature" (featureEmitter)="onEmitFeature($event)"></app-feature>
     </div>
 </article>

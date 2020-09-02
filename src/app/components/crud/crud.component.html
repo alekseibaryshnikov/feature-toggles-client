@@ -15,7 +15,7 @@
         <th scope="col">Acrchived</th>
       </tr>
     </thead>
-    <tbody *ngIf="featureFormArray && featureFormArray.length > 0">
+    <tbody *ngIf="featureFormArray | async as featureFormArray">
       <tr *ngFor="let feature of featureFormArray.controls; index as idx">
         <td style="text-align: center">
           {{ getFormControl(feature, "featureId").value }}

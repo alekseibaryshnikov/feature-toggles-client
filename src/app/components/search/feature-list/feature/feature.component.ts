@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Feature } from './feature';
 import { ApiService } from 'src/app/services/api.service';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-feature',
@@ -15,11 +16,7 @@ export class FeatureComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onChangeActivity($event: boolean) {
-    if ($event) {
-      this.api.bindFeatureToCustomer(this.feature.featureId, this.customerId).subscribe();
-    } else {
-      this.api.unbindFeatureFromCustomer(this.feature.featureId, this.customerId).subscribe();
-    }
+  onChangeActivity($event: MatCheckboxChange) {
+    this.api.bindFeatureToCustomer(this.feature.featureId, this.customerId, $event.checked).subscribe();
   }
 }

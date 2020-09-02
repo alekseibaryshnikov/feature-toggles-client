@@ -1,14 +1,12 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { FeatureEntity } from './featureEntity';
 import {
   FormGroup,
   FormControl,
   FormArray,
-  AbstractControl,
 } from '@angular/forms';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-crud',
@@ -16,50 +14,42 @@ import { switchMap, tap } from 'rxjs/operators';
   styleUrls: ['./crud.component.scss'],
 })
 export class CrudComponent implements OnInit, OnDestroy {
-  private readonly refreshToken$ = new BehaviorSubject(undefined);
+  featureFormArray: BehaviorSubject<FormArray> = new BehaviorSubject(new FormArray([]));
 
-  featureFormArray: FormArray;
-
-  features$: Subscription;
-
-  @Output('update')
-  emitter: EventEmitter<string> = new EventEmitter<string>();
-
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService) { }
 
   ngOnInit(): void {
-    this.features$ = this.refreshToken$
-      .pipe(switchMap(() => this.api.getFeaturesList()))
-      .subscribe((f) => {
-        this.featureFormArray = new FormArray([]);
-
-        f.forEach((feature) => {
-          this.featureFormArray.push(
-            new FormGroup({
-              featureId: new FormControl(feature.featureId),
-              displayName: new FormControl(feature.displayName),
-              technicalName: new FormControl(feature.technicalName),
-              expiresOn: new FormControl(feature.expiresOn),
-              description: new FormControl(feature.description),
-              inverted: new FormControl(feature.inverted),
-              archived: new FormControl(feature.archived),
-            })
-          );
-        });
-      });
+    this.updateState();
   }
 
   ngOnDestroy(): void {
-    this.refreshToken$.unsubscribe();
+    this.featureFormArray.unsubscribe();
   }
 
   changeBooleanField(idx: number, field: string) {
     const currentFormGroup: FormGroup = <FormGroup>(
-      this.featureFormArray.controls[idx]
+      this.featureFormArray.value.controls[idx]
     );
     const currentValue = currentFormGroup.controls[field].value;
 
     currentFormGroup.controls[field].setValue(!currentValue);
+  }
+
+  updateState() {
+    this.api.getFeaturesList().subscribe(features => {
+      const formArray: FormArray = new FormArray([]);
+      features.forEach(feature => formArray.push(new FormGroup({
+        featureId: new FormControl(feature.featureId),
+        displayName: new FormControl(feature.displayName),
+        technicalName: new FormControl(feature.technicalName),
+        expiresOn: new FormControl(feature.expiresOn),
+        description: new FormControl(feature.description),
+        inverted: new FormControl(feature.inverted),
+        archived: new FormControl(feature.archived),
+      })));
+
+      this.featureFormArray.next(formArray);
+    });
   }
 
   addNewFeature() {
@@ -73,7 +63,8 @@ export class CrudComponent implements OnInit, OnDestroy {
       archived: new FormControl(''),
     });
 
-    this.featureFormArray.push(formGroup);
+    const currentFormGroup = this.featureFormArray.value;
+    this.featureFormArray.next(new FormArray([...currentFormGroup.controls, formGroup]));
   }
 
   saveFeature(idx: number) {
@@ -90,9 +81,7 @@ export class CrudComponent implements OnInit, OnDestroy {
         inverted: feature.inverted,
         archived: feature.archived,
       })
-      .subscribe(() => this.refreshToken$.next(undefined));
-
-      this.emitter.emit(new Date().toISOString());
+      .subscribe();
   }
 
   deleteFeature(idx: number) {
@@ -101,19 +90,17 @@ export class CrudComponent implements OnInit, OnDestroy {
     if (formGroup.controls.featureId.value) {
       this.api
         .deleteFeature(formGroup.controls.featureId.value)
-        .subscribe(() => this.refreshToken$.next(undefined));
-
-        this.emitter.emit(new Date().toISOString());
+        .subscribe();
     }
 
-    this.featureFormArray.removeAt(idx);
-  }
-
-  getFormGroup(idx: number): FormGroup {
-    return <FormGroup>this.featureFormArray.controls[idx];
+    this.featureFormArray.value.removeAt(idx);
   }
 
   getFormControl(formGroup: FormGroup, controlName: string) {
     return formGroup['controls'][controlName];
+  }
+
+  private getFormGroup(idx: number): FormGroup {
+    return <FormGroup>this.featureFormArray.value.controls[idx];
   }
 }

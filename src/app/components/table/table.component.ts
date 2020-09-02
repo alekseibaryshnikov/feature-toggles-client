@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTab } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-table',
@@ -6,15 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
-  updatedAt: string;
+  tabUpdated: MatTab;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  updateState($event: string) {
-    this.updatedAt = $event;
+  onTabUpdated($event: MatTab) {
+    this.tabUpdated = $event;
   }
 
 }

@@ -1,12 +1,12 @@
 <article>
-    <mat-tab-group>
+    <mat-tab-group (selectedTabChange)="onTabUpdated($event)">
         <mat-tab label="Search">
             <div>
-                <app-search [updatedAt]="updatedAt"></app-search>
+                <app-search [tabUpdated]="tabUpdated"></app-search>
             </div>
         </mat-tab>
         <mat-tab label="Features">
-            <app-crud (update)="updateState($event)"></app-crud>
+            <app-crud></app-crud>
         </mat-tab>
       </mat-tab-group>
 </article>

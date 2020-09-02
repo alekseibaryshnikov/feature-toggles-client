@@ -9,10 +9,11 @@ import {
 import { ApiService } from 'src/app/services/api.service';
 import { FormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import FeatureListResponse from '../search/feature-list/featureListResponse';
 import { Search } from './search';
 import { Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, interval } from 'rxjs';
+import { Feature } from './feature-list/feature/feature';
+import { MatTab } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-search',
@@ -20,13 +21,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit, OnChanges, OnDestroy {
-  private readonly subscriptions: Set<Subscription> = new Set();
+  selectedFeatures: Set<string> = new Set();
 
-  featureNames: string[];
-
-  selectedFeatures = new Set<string>();
-
-  featureResponse: FeatureListResponse = null;
+  featureNames$: BehaviorSubject<string[]> = new BehaviorSubject([]);
+  featureList$: BehaviorSubject<Feature[]> = new BehaviorSubject([]);
 
   customerId = new FormControl(
     '',
@@ -36,23 +34,44 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     ])
   );
 
-  @Input('updatedAt')
-  updatedAt: string;
+  @Input('tabUpdated')
+  tabUpdated: MatTab;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService) { }
 
   ngOnInit(): void {
-    this.getFeatureNames();
+    this.updateState();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.updatedAt = changes.updatedAt.currentValue;
-    this.getFeatureNames();
-    this.onSearch();
+  ngOnChanges(_: SimpleChanges): void {  
+    this.updateState();
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((s) => s.unsubscribe);
+    this.featureList$.unsubscribe();
+    this.featureNames$.unsubscribe();
+  }
+
+  updateState() {
+    this.getFeatureNames();
+    this.getFeatureList();
+  }
+
+  getFeatureNames() {
+    this.api.getFeatureNames().subscribe(names => this.featureNames$.next(names));
+  }
+
+  getFeatureList() {
+    const requestBody: Search = {
+      featureRequest: {
+        customerId: this.customerId.value,
+        features: Array.from(this.selectedFeatures).map((feature) => {
+          return { name: feature };
+        }),
+      },
+    };
+
+    this.api.postFeaturesList(requestBody).subscribe(response => this.featureList$.next(response.features));
   }
 
   onSelectFeature($event: MatCheckboxChange) {
@@ -71,31 +90,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  onSearch() {
-    const requestBody: Search = {
-      featureRequest: {
-        customerId: this.customerId.value,
-        features: Array.from(this.selectedFeatures).map((feature) => {
-          return { name: feature };
-        }),
-      },
-    };
-
-    this.subscriptions.add(
-      this.api
-        .postFeaturesList(requestBody)
-        .subscribe((response) => (this.featureResponse = response))
-    );
-  }
-
-  getFeatureNames() {
-    this.subscriptions.add(
-      this.api.getFeatureNames().subscribe((n) => (this.featureNames = n))
-    );
-  }
-
   clearSelected() {
-    this.featureResponse = null;
-    this.subscriptions.forEach((s) => s.unsubscribe());
+    this.featureList$.next([]);
   }
 }

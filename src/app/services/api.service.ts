@@ -36,16 +36,11 @@ export class ApiService {
     return this.http.put<FeatureEntity>(this.featureUrl, {});
   }
 
-  bindFeatureToCustomer(featureId: bigint, customerId: bigint) {
-    return this.http.post(`${this.customerUrl}/features`, {
+  bindFeatureToCustomer(featureId: bigint, customerId: bigint, active: boolean) {
+    return this.http.patch(`${this.customerUrl}/feature`, {
       featureId,
       customerId,
-    });
-  }
-
-  unbindFeatureFromCustomer(featureId: bigint, customerId: bigint) {
-    return this.http.delete(`${this.customerUrl}/features`, {
-      params: { featureId: `${featureId}`, customerId: `${customerId}` },
+      active
     });
   }
 }

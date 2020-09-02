@@ -13,6 +13,9 @@ export class FeatureListComponent implements OnInit {
   @Input('features')
   features: Feature[];
 
+  @Input('customerId')
+  customerId: bigint;
+
   @Output('featureEmitter') featureEmitter = new EventEmitter<{active: boolean, featureId: bigint}>();
 
   ngOnInit(): void {
